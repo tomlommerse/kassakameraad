@@ -19,7 +19,7 @@ class HomePage extends StatelessWidget {
         ),
         actions: [
           Container(
-            color: Colors.red, // Set the background color to red
+            color: Color(0xFF2D3945), // Set the background color to red
             child: Row(
               children: [
                 Container(
