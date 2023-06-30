@@ -12,7 +12,7 @@ class KassaKameraad extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Navigation Demo',
+      title: 'KassaKameraad',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

@@ -23,7 +23,7 @@ class DatabaseHelper {
       version: 1,
       onCreate: (Database db, int version) async {
         // Create your tables here
-        await db.execute('CREATE TABLE products (id INTEGER PRIMARY KEY, name TEXT, price REAL, nix18 BOOLEAN)');
+        await db.execute('CREATE TABLE products (id INTEGER PRIMARY KEY, name TEXT, price REAL, ean INTEGER NULLABLE, nix18 BOOLEAN)');
 
         await db.execute('CREATE TABLE single_order (id INTEGER PRIMARY KEY, date TEXT, products TEXT, total REAL)');
 
