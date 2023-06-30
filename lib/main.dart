@@ -5,14 +5,14 @@ import 'directe_verkoop_page.dart';
 import 'number_page.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(KassaKameraad());
 }
 
-class MyApp extends StatelessWidget {
+class KassaKameraad extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Navigation Demo',
+      title: 'KassaKameraad',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
