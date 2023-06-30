@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'helpers/db_helper.dart';
+
 class DirecteVerkoopPage extends StatefulWidget {
   @override
   _DirecteVerkoopPageState createState() => _DirecteVerkoopPageState();
@@ -13,14 +15,17 @@ class _DirecteVerkoopPageState extends State<DirecteVerkoopPage> {
   static const TextStyle headingTextStyle = TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold);
   static const TextStyle productTextStyle = TextStyle(fontSize: 16.0);
 
-  Map<String, double> products = {
-    'Bier': 2.5,
-    'Droge witte wijn': 3.0,
-    'zoete witte wijn': 1.75,
-    'rode wijn': 2.0,
-    'baco': 3.5,
-    'cola': 2.0,
-  };
+  // Map<String, double> products = {
+  //   'Bier': 2.5,
+  //   'Droge witte wijn': 3.0,
+  //   'zoete witte wijn': 1.75,
+  //   'rode wijn': 2.0,
+  //   'baco': 3.5,
+  //   'cola': 2.0,
+  // };
+
+  var db = mainDB();
+  
 
   Map<String, int> selectedProducts = {};
 
