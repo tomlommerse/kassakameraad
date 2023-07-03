@@ -1,41 +1,76 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart' as path;
 
-class DatabaseHelper {
-  static final DatabaseHelper instance = DatabaseHelper._();
-  static Database? _database;
+class DBHelper {
+  static Future<Database> database() async {
+    final dbPath = await getDatabasesPath();
+    final dbFile = path.join(dbPath, 'products.db');
 
-  DatabaseHelper._();
-
-  Future<Database> get database async {
-    if (_database != null) {
-      return _database!;
-    }
-
-    _database = await initDatabase();
-    return _database!;
-  }
-
-  Future<Database> initDatabase() async {
-    String path = join(await getDatabasesPath(), 'my_database.db');
     return await openDatabase(
-      path,
+      dbFile,
       version: 1,
-      onCreate: (Database db, int version) async {
-        // Create your tables here
-        await db.execute('CREATE TABLE products (id INTEGER PRIMARY KEY, name TEXT, price REAL, ean INTEGER NULLABLE, nix18 BOOLEAN)');
-
-        await db.execute('CREATE TABLE single_order (id INTEGER PRIMARY KEY, date TEXT, products TEXT, total REAL)');
-
-        await db.execute('CREATE TABLE client (id INTEGER PRIMARY KEY, date TEXT, products TEXT, total REAL)');
-        await db.execute('CREATE TABLE history (id INTEGER PRIMARY KEY, table_nr INT, date TEXT, products TEXT, total REAL)');
-      
-        // DB Seeding
-        await db.execute('INSERT INTO products (name, price, nix18) VALUES ("Bier", 1.50, 1)');
-        await db.execute('INSERT INTO products (name, price, nix18) VALUES ("Fris", 1.00, 0)');
-        await db.execute('INSERT INTO products (name, price, nix18) VALUES ("Sterk", 2.00, 1)');
-        await db.execute('INSERT INTO products (name, price, nix18) VALUES ("Mix", 2.00, 1)');
+      onCreate: (db, version) {
+        _createProductTable(db);
+        _createOrderTable(db);
       },
     );
+  }
+
+  static void _createProductTable(Database db) {
+    db.execute(
+      'CREATE TABLE products(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE, price REAL)',
+    );
+  }
+
+  static void _createOrderTable(Database db) {
+    db.execute(
+      'CREATE TABLE orders(id INTEGER PRIMARY KEY AUTOINCREMENT, completedTime TEXT, totalPrice REAL)',
+    );
+  }
+
+  static Future<void> insertProduct(String name, double price) async {
+    final db = await DBHelper.database();
+
+    await db.insert(
+      'products',
+      {'name': name, 'price': price},
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  static Future<List<Map<String, dynamic>>> getProducts() async {
+    final db = await DBHelper.database();
+    return db.query('products');
+  }
+
+  static Future<void> deleteProduct(String name) async {
+    final db = await DBHelper.database();
+    await db.delete(
+      'products',
+      where: 'name = ?',
+      whereArgs: [name],
+    );
+  }
+
+  static Future<void> addInitialProducts() async {
+    await insertProduct('bier', 3.0);
+    await insertProduct('wijn', 5.0);
+    await insertProduct('cola', 2.5);
+  }
+
+  static Future<void> completeOrder(double totalPrice) async {
+    final db = await DBHelper.database();
+    final completedTime = DateTime.now().toIso8601String();
+
+    await db.insert(
+      'orders',
+      {'completedTime': completedTime, 'totalPrice': totalPrice},
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  static Future<List<Map<String, dynamic>>> getOrders() async {
+    final db = await DBHelper.database();
+    return db.query('orders');
   }
 }

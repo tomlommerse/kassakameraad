@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'home_page.dart';
-import 'logo_page.dart';
 import 'directe_verkoop_page.dart';
-import 'number_page.dart';
+import 'logo_page.dart';
+import 'settings_page.dart';
 
 void main() {
   runApp(KassaKameraad());
@@ -16,11 +15,11 @@ class KassaKameraad extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(),
+      home: DirecteVerkoopPage(),
       routes: {
         '/logo': (context) => LogoPage(),
         '/directe_verkoop': (context) => DirecteVerkoopPage(),
-        '/number_page': (context) => NumberPage(),
+        '/settings_page': (context) => SettingsPage(),
       },
     );
   }
