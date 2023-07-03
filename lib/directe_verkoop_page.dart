@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shake/shake.dart';
 import 'bottom_navigation.dart';
 import 'helpers/db_helper.dart';
 
@@ -17,6 +18,27 @@ class _DirecteVerkoopPageState extends State<DirecteVerkoopPage> {
 
   Map<String, double> products = {};
   Map<String, int> selectedProducts = {};
+
+  ShakeDetector? detector;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchProducts();
+
+    detector = ShakeDetector.autoStart(
+      onPhoneShake: () {
+        showDeletePopup();
+      },
+    );
+    detector!.startListening();
+  }
+
+  @override
+  void dispose() {
+    detector?.stopListening();
+    super.dispose();
+  }
 
   void selectProduct(String product) {
     setState(() {
@@ -82,10 +104,38 @@ class _DirecteVerkoopPageState extends State<DirecteVerkoopPage> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-    fetchProducts();
+  void showDeletePopup() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Delete Confirmation'),
+          content: Text('Are you sure you want to delete?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Cancel',
+                style: TextStyle(color: cancelButtonColor),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Perform delete operation
+                Navigator.of(context).pop();
+              },
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(primaryColor),
+              ),
+              child: Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future<void> fetchProducts() async {
