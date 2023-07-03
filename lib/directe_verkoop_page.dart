@@ -123,7 +123,9 @@ class _DirecteVerkoopPageState extends State<DirecteVerkoopPage> {
             ),
             ElevatedButton(
               onPressed: () {
-                // Perform delete operation
+                setState(() {
+                  selectedProducts.clear();
+                });
                 Navigator.of(context).pop();
               },
               style: ButtonStyle(
