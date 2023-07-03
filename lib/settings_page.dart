@@ -62,14 +62,16 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings Page'),
+        backgroundColor: Color(0xFF2D3945),
+        title: Text('Settings'),
+        automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
           children: [
             Text(
-              'Add Product',
+              'Add or edit Product',
               style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
             ),
             TextField(

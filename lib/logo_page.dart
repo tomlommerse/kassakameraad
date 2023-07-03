@@ -48,7 +48,7 @@ class _LogoPageState extends State<LogoPage> {
     return Padding(
       padding: EdgeInsets.all(16.0),
       child: Text(
-        'Total Price: \€${totalPrice.toStringAsFixed(2)}',
+        'Total: \€${totalPrice.toStringAsFixed(2)}',
         style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
       ),
     );
@@ -109,6 +109,7 @@ class _LogoPageState extends State<LogoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(0xFF2D3945),
         title: Text('Statistics'),
         automaticallyImplyLeading: false,
         actions: [

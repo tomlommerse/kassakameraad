@@ -105,13 +105,8 @@ class _DirecteVerkoopPageState extends State<DirecteVerkoopPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
         title: Text('Directe Verkoop Page'),
+        automaticallyImplyLeading: false,
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -194,7 +189,7 @@ class _DirecteVerkoopPageState extends State<DirecteVerkoopPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Total Price: €${calculateTotalPrice().toStringAsFixed(2)}'),
+                Text('Total €${calculateTotalPrice().toStringAsFixed(2)}'),
                 ElevatedButton(
                   onPressed: () {
                     pay();

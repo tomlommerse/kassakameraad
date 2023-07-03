@@ -52,12 +52,6 @@ class DBHelper {
     );
   }
 
-  static Future<void> addInitialProducts() async {
-    await insertProduct('bier', 3.0);
-    await insertProduct('wijn', 5.0);
-    await insertProduct('cola', 2.5);
-  }
-
   static Future<void> completeOrder(double totalPrice) async {
     final db = await DBHelper.database();
     final completedTime = DateTime.now().toIso8601String();
