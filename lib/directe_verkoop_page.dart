@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'bottom_navigation.dart';
-
 import 'helpers/db_helper.dart';
 
 class DirecteVerkoopPage extends StatefulWidget {
@@ -17,18 +15,7 @@ class _DirecteVerkoopPageState extends State<DirecteVerkoopPage> {
       TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold);
   static const TextStyle productTextStyle = TextStyle(fontSize: 16.0);
 
-  // Map<String, double> products = {
-  //   'Bier': 2.5,
-  //   'Droge witte wijn': 3.0,
-  //   'zoete witte wijn': 1.75,
-  //   'rode wijn': 2.0,
-  //   'baco': 3.5,
-  //   'cola': 2.0,
-  // };
-
-  var db = mainDB();
-  
-
+  Map<String, double> products = {};
   Map<String, int> selectedProducts = {};
 
   void selectProduct(String product) {
@@ -73,10 +60,14 @@ class _DirecteVerkoopPageState extends State<DirecteVerkoopPage> {
               ),
             ),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
+                final totalPrice = calculateTotalPrice();
+                await DBHelper.completeOrder(totalPrice);
+
                 setState(() {
                   selectedProducts.clear();
                 });
+
                 Navigator.of(context).pop();
               },
               style: ButtonStyle(
@@ -89,6 +80,24 @@ class _DirecteVerkoopPageState extends State<DirecteVerkoopPage> {
         );
       },
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchProducts();
+  }
+
+  Future<void> fetchProducts() async {
+    final productList = await DBHelper.getProducts();
+
+    setState(() {
+      products = Map.fromIterable(
+        productList,
+        key: (product) => product['name'],
+        value: (product) => product['price'],
+      );
+    });
   }
 
   @override
@@ -214,43 +223,3 @@ class _DirecteVerkoopPageState extends State<DirecteVerkoopPage> {
     );
   }
 }
-
-class CupertinoTabBarExample extends StatelessWidget {
-  const CupertinoTabBarExample({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return CupertinoTabScaffold(
-      tabBar: CupertinoTabBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.chart_bar_alt_fill),
-            label: 'Statistieken',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.local_bar),
-            label: 'Bestellen',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.fact_check),
-            label: 'Bestelling',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.settings),
-            label: 'Instellingen',
-          ),
-        ],
-      ),
-      tabBuilder: (BuildContext context, int index) {
-        return CupertinoTabView(
-          builder: (BuildContext context) {
-            return Center(
-              child: Text('Content of tab $index'),
-            );
-          },
-        );
-      },
-    );
-  }
-}
-
