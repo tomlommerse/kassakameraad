@@ -20,7 +20,7 @@ class BottomNavigation extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.local_drink),
-          label: 'Directe Verkoop',
+          label: 'Direct sales',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.settings),

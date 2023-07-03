@@ -25,10 +25,10 @@ class _LogoPageState extends State<LogoPage> {
     });
   }
 
-  // Calculate the total price for the last 16 hours
+  // totaalprijs
   double calculateTotalPrice() {
     DateTime now = DateTime.now();
-    DateTime start = now.subtract(Duration(hours: 16)); // 16 hours ago
+    DateTime start = now.subtract(Duration(hours: 16)); // 16 uur = totaal
 
     double totalPrice = 0;
 

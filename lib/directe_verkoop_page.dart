@@ -31,7 +31,7 @@ class _DirecteVerkoopPageState extends State<DirecteVerkoopPage> {
         showDeletePopup();
       },
     );
-    detector!.startListening();
+    detector?.startListening();
   }
 
   @override
@@ -110,7 +110,7 @@ class _DirecteVerkoopPageState extends State<DirecteVerkoopPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Delete Confirmation'),
-          content: Text('Are you sure you want to delete?'),
+          content: Text('Clear all products?'),
           actions: [
             TextButton(
               onPressed: () {
@@ -155,7 +155,7 @@ class _DirecteVerkoopPageState extends State<DirecteVerkoopPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
-        title: Text('Directe Verkoop Page'),
+        title: Text('Direct sales'),
         automaticallyImplyLeading: false,
       ),
       body: Column(
