@@ -293,7 +293,6 @@ class _DirecteVerkoopPageState extends State<DirecteVerkoopPage> {
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Column 1: Products
           Expanded(
             flex: 1,
             child: Column(
@@ -333,8 +332,6 @@ class _DirecteVerkoopPageState extends State<DirecteVerkoopPage> {
               ],
             ),
           ),
-
-          // Column 2: Ordered Products
           Expanded(
             flex: 1,
             child: Column(
@@ -410,7 +407,7 @@ class _DirecteVerkoopPageState extends State<DirecteVerkoopPage> {
         onTap: (index) {
           if (index == 0) {
             Navigator.popUntil(context, ModalRoute.withName('/'));  //FIXME niet de beste fix, maar het werkt
-            Navigator.pushNamed(context, '/logo');                  //wat ik ook doe, pushreplacementnamed werkt niet zoals ik wil
+            Navigator.pushNamed(context, '/logo');                  //pushreplacementnamed werkt niet zoals ik wil
           } else if (index == 2) {
             Navigator.popUntil(context, ModalRoute.withName('/'));
             Navigator.pushNamed(context, '/settings_page');
