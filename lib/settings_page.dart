@@ -120,8 +120,10 @@ class _SettingsPageState extends State<SettingsPage> {
         currentIndex: 2,
         onTap: (index) {
           if (index == 0) {
+            Navigator.popUntil(context, ModalRoute.withName('/'));
             Navigator.pushNamed(context, '/logo');
           } else if (index == 1) {
+            Navigator.popUntil(context, ModalRoute.withName('/'));
             Navigator.pushNamed(context, '/directe_verkoop');
           }
         },

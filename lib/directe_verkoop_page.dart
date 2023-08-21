@@ -154,6 +154,17 @@ class _DirecteVerkoopPageState extends State<DirecteVerkoopPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Detect the current orientation
+    Orientation orientation = MediaQuery.of(context).orientation;
+
+    if (orientation == Orientation.portrait) {
+      return _buildPortraitLayout();
+    } else {
+      return _buildLandscapeLayout();
+    }
+  }
+
+  Widget _buildPortraitLayout() {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
@@ -261,8 +272,147 @@ class _DirecteVerkoopPageState extends State<DirecteVerkoopPage> {
         currentIndex: 1,
         onTap: (index) {
           if (index == 0) {
+            Navigator.popUntil(context, ModalRoute.withName('/'));
             Navigator.pushNamed(context, '/logo');
           } else if (index == 2) {
+            Navigator.popUntil(context, ModalRoute.withName('/'));
+            Navigator.pushNamed(context, '/settings_page');
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _buildLandscapeLayout() {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: primaryColor,
+        title: Text('Direct sales'),
+        automaticallyImplyLeading: false,
+      ),
+      body: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Column 1: Products
+          Expanded(
+            flex: 1,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text(
+                    'Products',
+                    style: headingTextStyle,
+                  ),
+                ),
+                Expanded(
+                  child: GridView.count(
+                    crossAxisCount: 2,
+                    childAspectRatio: 3.0,
+                    padding: EdgeInsets.all(16.0),
+                    mainAxisSpacing: 8.0,
+                    crossAxisSpacing: 8.0,
+                    children: products.keys.map((product) {
+                      return ElevatedButton(
+                        onPressed: () {
+                          selectProduct(product);
+                        },
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(primaryColor),
+                        ),
+                        child: Text(
+                          product,
+                          style: productTextStyle,
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Column 2: Ordered Products
+          Expanded(
+            flex: 1,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text(
+                    'Ordered Products',
+                    style: headingTextStyle,
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: selectedProducts.length,
+                    itemBuilder: (context, index) {
+                      final product = selectedProducts.keys.elementAt(index);
+                      final quantity = selectedProducts[product];
+                      final price = products[product]!;
+
+                      return ListTile(
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(product),
+                            Text('Price: €${price.toStringAsFixed(2)}'),
+                          ],
+                        ),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.remove),
+                              onPressed: () {
+                                removeProduct(product);
+                              },
+                            ),
+                            Text('Qty: $quantity'),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Divider(),
+                Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Total €${calculateTotalPrice().toStringAsFixed(2)}'),
+                      ElevatedButton(
+                        onPressed: () {
+                          pay();
+                        },
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(primaryColor),
+                        ),
+                        child: Text('Pay'),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigation(
+        currentIndex: 1,
+        onTap: (index) {
+          if (index == 0) {
+            Navigator.popUntil(context, ModalRoute.withName('/'));  //FIXME niet de beste fix, maar het werkt
+            Navigator.pushNamed(context, '/logo');                  //wat ik ook doe, pushreplacementnamed werkt niet zoals ik wil
+          } else if (index == 2) {
+            Navigator.popUntil(context, ModalRoute.withName('/'));
             Navigator.pushNamed(context, '/settings_page');
           }
         },

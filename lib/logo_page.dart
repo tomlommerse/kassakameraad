@@ -123,8 +123,10 @@ class _LogoPageState extends State<LogoPage> {
         currentIndex: 0,
         onTap: (index) {
           if (index == 1) {
+            Navigator.popUntil(context, ModalRoute.withName('/'));
             Navigator.pushNamed(context, '/directe_verkoop');
           } else if (index == 2) {
+            Navigator.popUntil(context, ModalRoute.withName('/'));
             Navigator.pushNamed(context, '/settings_page');
           }
         },
