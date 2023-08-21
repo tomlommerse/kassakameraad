@@ -60,6 +60,17 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Detect the current orientation
+    Orientation orientation = MediaQuery.of(context).orientation;
+
+    if (orientation == Orientation.portrait) {
+      return _buildPortraitLayout();
+    } else {
+      return _buildLandscapeLayout();
+    }
+  }
+
+  Widget _buildPortraitLayout() {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF2D3945),
@@ -71,7 +82,7 @@ class _SettingsPageState extends State<SettingsPage> {
         child: Column(
           children: [
             Text(
-              'Add or edit Product',
+              'Add or Edit Product',
               style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
             ),
             TextField(
@@ -90,31 +101,103 @@ class _SettingsPageState extends State<SettingsPage> {
               child: Text('Add'),
             ),
             SizedBox(height: 24.0),
-            Text(
-              'Remove Product',
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-            ),
-            Expanded(
-              child: ListView(
-                children: productList.map((product) {
-                  final String productName = product['name'];
-                  final double productPrice = product['price'];
-
-                  return ListTile(
-                    title: Text(productName),
-                    subtitle: Text('Price: €${productPrice.toStringAsFixed(2)}'),
-                    trailing: IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () {
-                        removeProduct(productName);
-                      },
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigation(
+        currentIndex: 2,
+        onTap: (index) {
+          if (index == 0) {
+            Navigator.popUntil(context, ModalRoute.withName('/'));
+            Navigator.pushNamed(context, '/logo');
+          } else if (index == 1) {
+            Navigator.popUntil(context, ModalRoute.withName('/'));
+            Navigator.pushNamed(context, '/directe_verkoop');
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _buildLandscapeLayout() {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xFF2D3945),
+        title: Text('Settings'),
+        automaticallyImplyLeading: false,
+      ),
+      body: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Column 1: Add/Edit Product
+          Expanded(
+            flex: 1,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: Text(
+                    'Add or Edit Product',
+                    style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                TextField(
+                  controller: _productNameController,
+                  decoration: InputDecoration(labelText: 'Product Name'),
+                ),
+                SizedBox(height: 15.0),
+                TextField(
+                  controller: _productPriceController,
+                  decoration: InputDecoration(labelText: 'Product Price'),
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                ),
+                SizedBox(height: 15.0),
+                ElevatedButton(
+                  onPressed: addProduct,
+                  child: Text('Add'),
+                ),
+                SizedBox(height: 3.0),
+              ],
+            ),
+          ),
+
+          // Column 2: Remove Product
+          Expanded(
+            flex: 1,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text(
+                    'Remove Product',
+                    style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Expanded(
+                  child: ListView(
+                    children: productList.map((product) {
+                      final String productName = product['name'];
+                      final double productPrice = product['price'];
+
+                      return ListTile(
+                        title: Text(productName),
+                        subtitle: Text('Price: €${productPrice.toStringAsFixed(2)}'),
+                        trailing: IconButton(
+                          icon: Icon(Icons.delete),
+                          onPressed: () {
+                            removeProduct(productName);
+                          },
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: BottomNavigation(
         currentIndex: 2,
